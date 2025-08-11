@@ -22,7 +22,7 @@
 
           users.users.hex = {
             isNormalUser = true;
-            description = "hex"
+            description = "hex";
             extraGroups = [ "wheel" "video" "audio" "input" "networkmanager" ];
             shell = pkgs.zsh;
           };

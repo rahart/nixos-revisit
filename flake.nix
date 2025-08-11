@@ -6,8 +6,8 @@
     home-manager.url = "github:nix-community/home-manager/release-25.05";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
 
-    # Your dotfiles (nvim/tmux/hypr configs live here)
     dotfiles.url = "github:rahart/dotfiles";
+    dotfiles.flake = false;
   };
 
   outputs = { self, nixpkgs, home-manager, dotfiles, ... }:

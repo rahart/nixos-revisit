@@ -1,4 +1,4 @@
-{ config, pkgs, ... }:
+{ config, pkgs, dotfiles ? null, ... }:
 
 {
   home.username = "hex";
@@ -7,46 +7,28 @@
 
   programs.home-manager.enable = true;
 
-  # Keep HM’s scope to personal tools + dotfiles ONLY
   programs.git = {
     enable = true;
     userName = "hex";
     userEmail = "hex@dottrav.com";
   };
 
+  # Zsh with autosuggestions & syntax highlighting (correct option names)
   programs.zsh = {
     enable = true;
     autosuggestions.enable = true;
     syntaxHighlighting.enable = true;
-    oh-my-zsh = { enable = true; theme = "robbyrussell"; plugins = [ "git" ]; };
+    oh-my-zsh = {
+      enable = true;
+      theme = "robbyrussell";
+      plugins = [ "git" ];
+    };
   };
 
-  programs.tmux = {
-    enable = true;
-    clock24 = true;
-    extraConfig = ''
-      set -g mouse on
-      setw -g aggressive-resize on
-      set -g status-interval 3
-    '';
-  };
+  home.packages = with pkgs; [
+    neovim tmux ripgrep fd gcc gnumake unzip wl-clipboard
+  ];
 
-  programs.neovim = {
-    enable = true;
-    defaultEditor = true;
-    viAlias = true;
-    vimAlias = true;
-    withNodeJs = false;
-    extraConfig = ''
-      set number
-      set relativenumber
-      set nowrap
-      set noshowmode
-      set clipboard=unnamedplus
-    '';
-  };
-
-  # Hyprland user config (minimal, ADHD-friendly)
   xdg.configFile."hypr/hyprland.conf".text = ''
     monitor=,preferred,auto,1
     input {
@@ -84,10 +66,6 @@
     bind=$mod,4,workspace,4
   '';
 
-  home.packages = with pkgs; [
-    # GUI bits you actually use; keep short at first
-    alacritty
-    rofi
-    thunar
-  ];
+  xdg.configFile."nvim".source = dotfiles + "/nvim";
+  xdg.configFile."tmux/tmux.conf".source = dotfiles + "/tmux/tmux.conf";
 }
